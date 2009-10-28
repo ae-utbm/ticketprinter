@@ -35,7 +35,7 @@
       <height>331</height>
      </rect>
     </property>
-    <widget class="QPushButton" name="vente10" >
+    <widget class="QPushButton" name="vente1" >
      <property name="geometry" >
       <rect>
        <x>50</x>
@@ -50,10 +50,10 @@
       </font>
      </property>
      <property name="text" >
-      <string>10 tickets</string>
+      <string>tickets 1</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="vente20" >
+    <widget class="QPushButton" name="vente2" >
      <property name="geometry" >
       <rect>
        <x>370</x>
@@ -68,7 +68,7 @@
       </font>
      </property>
      <property name="text" >
-      <string>20 tickets</string>
+      <string>tickets 2</string>
      </property>
     </widget>
     <widget class="QGroupBox" name="Stats" >
@@ -83,7 +83,7 @@
      <property name="title" >
       <string>Statistiques</string>
      </property>
-     <widget class="QLabel" name="tik10label" >
+     <widget class="QLabel" name="tik1label" >
       <property name="geometry" >
        <rect>
         <x>10</x>
@@ -98,10 +98,10 @@
        </font>
       </property>
       <property name="text" >
-       <string>Carnets de 10 tickets :</string>
+       <string>Carnets de tickets 1 :</string>
       </property>
      </widget>
-     <widget class="QLCDNumber" name="lcd10tik" >
+     <widget class="QLCDNumber" name="lcd1tik" >
       <property name="geometry" >
        <rect>
         <x>220</x>
@@ -537,7 +537,7 @@
        <bool>false</bool>
       </property>
      </widget>
-     <widget class="QLCDNumber" name="lcd20tik" >
+     <widget class="QLCDNumber" name="lcd2tik" >
       <property name="geometry" >
        <rect>
         <x>220</x>
@@ -970,7 +970,7 @@
        </font>
       </property>
      </widget>
-     <widget class="QLabel" name="tik20label" >
+     <widget class="QLabel" name="tik2label" >
       <property name="geometry" >
        <rect>
         <x>10</x>
@@ -985,7 +985,7 @@
        </font>
       </property>
       <property name="text" >
-       <string>Carnets de 20 tickets :</string>
+       <string>Carnets de tickets 2 :</string>
       </property>
      </widget>
     </widget>

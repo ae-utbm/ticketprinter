@@ -11,11 +11,13 @@ class VenteTickets : public QMainWindow, public Ui::MainWindow
 {
 Q_OBJECT
 public:
-	VenteTickets( QWidget * parent = 0, Qt::WFlags f = 0 );
+  VenteTickets( QWidget * parent = 0, Qt::WFlags f = 0);
+  void setUniteCarnet(int unite);
 private:
   QString EventName;
   QPrinter Printer;
   QImage ticketImg;
+  int uniteCarnet;
   void SigConnect();
   bool SetPrinterInfo(QString name);
   void Print(int nb);
@@ -26,8 +28,8 @@ private slots:
   void About();
   void Load_image();
   void SelectPrinter();
-  void Print10();
-  void Print20();
+  void Print1();
+  void Print2();
 };
 #endif
 

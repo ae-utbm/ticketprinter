@@ -33,6 +33,8 @@ VenteTickets::VenteTickets( QWidget * parent, Qt::WFlags f)
     ticketImg=ticketImg.scaledToWidth(Printer.pageRect().width()/2,
                                       Qt::SmoothTransformation);
 
+  this->setUniteCarnet(10);
+
   /* Connect signals */
   SigConnect();
 }
@@ -46,8 +48,8 @@ void VenteTickets::SigConnect()
   connect(actionEventName,SIGNAL(activated()),this,SLOT(SetEventName()));
   connect(actionA_propos,SIGNAL(activated()),this,SLOT(About()));
   connect(actionImprimante,SIGNAL(activated()),this,SLOT(SelectPrinter()));
-  connect(vente10, SIGNAL( released() ), this, SLOT(Print10()));
-  connect(vente20, SIGNAL( released() ), this, SLOT(Print20()));
+  connect(vente1, SIGNAL( released() ), this, SLOT(Print1()));
+  connect(vente2, SIGNAL( released() ), this, SLOT(Print2()));
 }
 
 /**
@@ -140,6 +142,7 @@ void VenteTickets::About()
   about += QString::fromUtf8("<h4>Développeur(s) :</h4>");
   about += "<ul>";
   about += "<li> Simon Lopez";
+  about += "<li> Mathieu Briand";
   about += "</ul>";
   about += QString::fromUtf8("<h4>Basé sur </h4>");
   about += "Qt ";
@@ -185,19 +188,19 @@ bool VenteTickets::SetPrinterInfo(QString name)
 /**
  * Print 10 tickets
  */
-void VenteTickets::Print10()
+void VenteTickets::Print1()
 {
-  lcd10tik->display(lcd10tik->intValue()+1);
-  Print(10);
+  lcd1tik->display(lcd1tik->intValue()+1);
+  Print(uniteCarnet);
 }
 
 /**
  * Print 20 tickets
  */
-void VenteTickets::Print20()
+void VenteTickets::Print2()
 {
-  lcd20tik->display(lcd20tik->intValue()+1);
-  Print(20);
+  lcd2tik->display(lcd2tik->intValue()+1);
+  Print(2*uniteCarnet);
 }
 
 /**
@@ -251,5 +254,22 @@ void VenteTickets::Print(int nb)
                      ticketImg.height());
   }
   Painter.end();
+}
+
+void VenteTickets::setUniteCarnet(int unite)
+{
+  QString str;
+
+  uniteCarnet = unite;
+
+  str = QString("Carnet de ").append(QString::number(uniteCarnet)).append(" tickets :");
+  tik1label->setText(str);
+  str = QString("Carnet de ").append(QString::number(2 * uniteCarnet)).append(" tickets :");
+  tik2label->setText(str);
+
+  str = QString::number(uniteCarnet).append(" tickets");
+  vente1->setText(str);
+  str = QString::number(2 * uniteCarnet).append(" tickets");
+  vente2->setText(str);
 }
 
