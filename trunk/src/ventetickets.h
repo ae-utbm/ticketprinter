@@ -4,8 +4,28 @@
 #include <QMainWindow>
 #include <QString>
 #include <QPrinter>
+#include <iostream>
+#include <fstream>
+#include <string>
 
 #include "ui_mainwindow.h"
+
+using namespace std;
+
+
+class LogFile
+{
+public:
+  void loadLogFile(string fileName);
+  int getCount1();
+  int getCount2();
+  void log(int t1, int t2);
+private:
+  fstream logFile;
+  streamsize logPos;
+  int ticket1Count;
+  int ticket2Count;
+};
 
 class VenteTickets : public QMainWindow, public Ui::MainWindow
 {
@@ -18,6 +38,7 @@ private:
   QPrinter Printer;
   QImage ticketImg;
   int uniteCarnet;
+  LogFile logFile;
   void SigConnect();
   bool SetPrinterInfo(QString name);
   void Print(int nb);
@@ -31,8 +52,6 @@ private slots:
   void Print1();
   void Print2();
 };
+
 #endif
-
-
-
 

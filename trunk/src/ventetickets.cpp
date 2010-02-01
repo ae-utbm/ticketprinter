@@ -6,6 +6,8 @@
 #include <QPoint>
 #include <QInputDialog>
 #include <QFileDialog>
+#include <locale>
+#include <sstream>
 
 /**
  * Constructor
@@ -17,6 +19,7 @@ VenteTickets::VenteTickets( QWidget * parent, Qt::WFlags f)
   setWindowTitle("Vente de tickets");
   setupUi(this);
   EventName="";
+  string logFileName;
 
   /* printer */
   //if we can't find the default printer, we choose one
@@ -33,6 +36,13 @@ VenteTickets::VenteTickets( QWidget * parent, Qt::WFlags f)
     ticketImg=ticketImg.scaledToWidth(Printer.pageRect().width()/2,
                                       Qt::SmoothTransformation);
 
+  logFileName = getenv("HOME");
+  logFileName += "/aeticketptr_log.txt";
+  this->logFile.loadLogFile(logFileName);
+  lcd1tik->display(this->logFile.getCount1());
+  lcd2tik->display(this->logFile.getCount2());
+
+  // set default number of tickets
   this->setUniteCarnet(10);
 
   /* Connect signals */
@@ -191,6 +201,7 @@ bool VenteTickets::SetPrinterInfo(QString name)
 void VenteTickets::Print1()
 {
   lcd1tik->display(lcd1tik->intValue()+1);
+  logFile.log(lcd1tik->intValue(), lcd2tik->intValue());
   Print(uniteCarnet);
 }
 
@@ -200,6 +211,7 @@ void VenteTickets::Print1()
 void VenteTickets::Print2()
 {
   lcd2tik->display(lcd2tik->intValue()+1);
+  logFile.log(lcd1tik->intValue(), lcd2tik->intValue());
   Print(2*uniteCarnet);
 }
 
@@ -256,6 +268,10 @@ void VenteTickets::Print(int nb)
   Painter.end();
 }
 
+/**
+ * Set number of tickets per group
+ * @param nb number of tickets per group
+ */
 void VenteTickets::setUniteCarnet(int unite)
 {
   QString str;
@@ -271,5 +287,114 @@ void VenteTickets::setUniteCarnet(int unite)
   vente1->setText(str);
   str = QString::number(2 * uniteCarnet).append(" tickets");
   vente2->setText(str);
+}
+
+
+/**
+ * Open log file
+ * @param fileName lof file name
+ */
+void LogFile::loadLogFile(string fileName)
+{
+  char buf[50];
+  tm timeinfo;
+  time_t ttime;
+  int t1, t2;
+
+  ticket1Count = 0;
+  ticket2Count = 0;
+
+  logFile.open(fileName.c_str(), fstream::in | fstream::out | fstream::ate);
+
+  if (logFile.fail())
+  {
+    ofstream f(fileName.c_str());
+    f.close();
+    logFile.open(fileName.c_str(), fstream::in | fstream::out | fstream::ate);
+  }
+
+  // On va au début de la dernière ligne du fichier
+  logFile.seekg(-2, ios_base::cur);
+  while ((logFile.peek() != '\n') && (logFile.tellg() > 0))
+    logFile.seekg(-1, ios_base::cur);
+
+  if (logFile.tellg() > 0)
+    logFile.seekg(1, ios_base::cur);
+
+  // Si la ligne n'est pas vide, on récupère les infos
+  if (! logFile.fail())
+  {
+    logPos = logFile.tellg();
+
+    logFile.getline(buf, 50);
+
+    sscanf(buf, "%d-%d-%d %d:%d:%d %d %d",
+        &(timeinfo.tm_year), &(timeinfo.tm_mon), &(timeinfo.tm_mday),
+        &(timeinfo.tm_hour), &(timeinfo.tm_min), &(timeinfo.tm_sec),
+        &t1, &t2);
+
+    timeinfo.tm_year -= 1900;
+    timeinfo.tm_mon--;
+    timeinfo.tm_isdst = 0;
+
+    ttime = mktime(&timeinfo);
+
+    // Si le log date d'il y a moins de deux heures, on charge les nombres de ventes
+    if ((time(NULL) - ttime)  < 7200)
+    {
+      ticket1Count = t1;
+      ticket2Count = t2;
+    }
+    else
+    {
+      logFile.seekg(0, ios_base::end);
+      logPos = logFile.tellg();
+    }
+  }
+  else
+  {
+    logPos = 0;
+    logFile.clear();
+  }
+}
+
+/**
+ * Get how many time 1st type tickets group has been printed
+ */
+int LogFile::getCount1()
+{
+  return ticket1Count;
+}
+
+/**
+ * Get how many time 2nd type tickets group has been printed
+ */
+int LogFile::getCount2()
+{
+  return ticket2Count;
+}
+
+
+/**
+ * Save how many time each types of tickets group has been printed
+ */
+void LogFile::log(int t1, int t2)
+{
+    char buf[50];
+    time_t t;
+
+    ticket1Count = t1;
+    ticket2Count = t2;
+
+    logFile.seekg(logPos, ios_base::beg);
+
+    t = time(NULL);
+    strftime(buf, 50, "%Y-%m-%d %H:%M:%S", localtime(&t));
+    logFile << buf;
+
+    snprintf(buf, 50, " %d %d", ticket1Count, ticket2Count);
+    logFile << buf << endl;
+
+    logFile.flush();
 }
 
