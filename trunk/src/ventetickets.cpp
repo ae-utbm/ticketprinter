@@ -58,6 +58,8 @@ void VenteTickets::SigConnect()
   connect(actionEventName,SIGNAL(activated()),this,SLOT(SetEventName()));
   connect(actionA_propos,SIGNAL(activated()),this,SLOT(About()));
   connect(actionImprimante,SIGNAL(activated()),this,SLOT(SelectPrinter()));
+  connect(actionReset,SIGNAL(activated()),this,SLOT(ResetCompteurs()));
+  connect(actionNbTickets,SIGNAL(activated()),this,SLOT(SelectNbTickets()));
   connect(vente1, SIGNAL( released() ), this, SLOT(Print1()));
   connect(vente2, SIGNAL( released() ), this, SLOT(Print2()));
 }
@@ -265,6 +267,17 @@ void VenteTickets::Print(int nb)
                      ticketImg.width(),
                      ticketImg.height());
   }
+
+  if (nb%2 == 1)
+  {
+    Painter.drawImage(QPoint(0,(nb/2)*ticketImg.height()+header),
+                      ticketImg);
+    Painter.drawRect(0,
+                     (nb/2)*ticketImg.height()+header,
+                     ticketImg.width(),
+                     ticketImg.height());
+  }
+
   Painter.end();
 }
 
@@ -287,6 +300,28 @@ void VenteTickets::setUniteCarnet(int unite)
   vente1->setText(str);
   str = QString::number(2 * uniteCarnet).append(" tickets");
   vente2->setText(str);
+}
+
+/**
+  * Prompt user for number of tickets per group
+  */
+void VenteTickets::SelectNbTickets()
+{
+  int nb = QInputDialog::getInt(this,
+                                QString::fromUtf8("Nombre de tickets par carnet"),
+                                QString::fromUtf8("Nombre de tickets (carnet simple) :"),
+                                uniteCarnet, 1, 100);
+  setUniteCarnet(nb);
+}
+
+/**
+ * Reset all counters
+ */
+void VenteTickets::ResetCompteurs()
+{
+  lcd1tik->display(0);
+  lcd2tik->display(0);
+  logFile.log(lcd1tik->intValue(), lcd2tik->intValue());
 }
 
 

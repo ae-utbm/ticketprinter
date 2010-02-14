@@ -51,6 +51,8 @@ private slots:
   void SelectPrinter();
   void Print1();
   void Print2();
+  void SelectNbTickets();
+  void ResetCompteurs();
 };
 
 #endif

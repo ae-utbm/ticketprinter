@@ -1008,6 +1008,8 @@
     <addaction name="actionEventName" />
     <addaction name="actionTickets" />
     <addaction name="actionImprimante" />
+    <addaction name="actionNbTickets" />
+    <addaction name="actionReset" />
     <addaction name="separator" />
     <addaction name="actionQuitter" />
    </widget>
@@ -1047,6 +1049,16 @@
   <action name="actionImprimante" >
    <property name="text" >
     <string>Imprimante</string>
+   </property>
+  </action>
+  <action name="actionReset" >
+   <property name="text" >
+    <string>Remettre les comptes à zéro</string>
+   </property>
+  </action>
+  <action name="actionNbTickets" >
+   <property name="text" >
+    <string>Nombre de tickets par carnets</string>
    </property>
   </action>
   <action name="actionEventName" >
