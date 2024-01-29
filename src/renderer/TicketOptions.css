@@ -1,0 +1,80 @@
+.stylized-input {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap-smaller);
+}
+
+.stylized-input > input {
+  width: 100%;
+  height: 30px;
+  opacity: 0;
+  position: absolute;
+  cursor: pointer;
+}
+
+.stylized-input > input:focus {
+  outline: none;
+}
+
+.stylized-input > .filepath,
+.stylized-input > .button {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--gap-smaller);
+  height: 30px;
+}
+
+.stylized-input > .filepath {
+  width: 100%;
+  background-color: var(--black-transparent);
+  border-radius: var(--border-radius);
+}
+
+.stylized-input > .button {
+  width: 150px;
+  background-color: var(--black);
+  text-transform: uppercase;
+  justify-content: center;
+  font-size: small;
+  border-radius: var(--border-radius);
+}
+
+.ticket-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-smaller);
+}
+
+.ticket-options > .options {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap-smaller);
+}
+
+.ticket-options > .options > .buttons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-smaller);
+  width: 40%;
+}
+
+.ticket-options > .options > .ticket {
+  display: block;
+  background-color: var(--black-transparent);
+  height: 250px;
+  width: 100%;
+  max-width: 250px;
+  position: relative;
+  border-radius: var(--border-radius);
+}
+
+.ticket-options > .options > .ticket > img {
+  width: 95%;
+  max-height: 95%;
+  position: absolute;
+  top: 2.5%;
+  left: 2.5%;
+
+  object-fit: contain;
+}

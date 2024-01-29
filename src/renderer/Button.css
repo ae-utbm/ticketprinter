@@ -1,0 +1,36 @@
+button[type=button] {
+  background-color: var(--black);
+  color: white;
+  text-transform: uppercase;
+  border: none;
+
+  font-size: small;
+  height: 30px;
+  border-radius: var(--border-radius);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-smaller);
+
+  cursor: pointer;
+}
+
+button[type=button].icon {
+  justify-content: flex-start;
+  padding: 0 var(--gap-smaller) 0 0;
+}
+
+button[type=button] > img {
+  width: 30px;
+  height: 30px;
+}
+
+button[type=button]:hover {
+  background-color: var(--black-hover);
+}
+
+button[type=button]:disabled {
+  background-color: var(--black-disabled);
+  cursor: not-allowed;
+}
