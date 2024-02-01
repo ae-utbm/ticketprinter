@@ -20,13 +20,37 @@
 
 .base > .options {
   width: 100%;
-  padding-left: var(--gap);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
 }
 
-.base > .options > .smalls {
-  background-color: green;
+.base > .options > .elements {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  gap: 15px;
+  flex-wrap: wrap;
+  gap: var(--gap);
+}
+
+.base > .options > .elements > .element {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-smaller);
+
+  width: calc(50% - var(--gap-smaller));
+  padding: 8px 10px 10px 10px;
+
+  background-color: var(--black-transparent);
+  border-radius: var(--border-radius);
+}
+
+/* Fix react-photo-editor CSS */
+input[type="number"].w-14.pl-1.rounded-md.text-right {
+  color: black;
+}
+
+/* Fix react-photo-editor CSS */
+canvas.max-w-lg.max-h-\[22rem\].w-full.object-fit.mx-auto {
+  width: auto;
 }

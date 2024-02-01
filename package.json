@@ -1,4 +1,7 @@
 {
+  "name": "@ae_utbm/ticket_printer",
+  "displayName": "Ticket Printer v2",
+  "version": "2.0.0",
   "description": "A foundation for scalable desktop apps",
   "keywords": [
     "electron",
@@ -101,7 +104,8 @@
     "electron-updater": "^6.1.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.16.0"
+    "react-photo-editor": "^2.0.0",
+    "react-router-dom": "^6.16.0",
   },
   "devDependencies": {
     "@electron/notarize": "^2.1.0",

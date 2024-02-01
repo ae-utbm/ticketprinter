@@ -21,9 +21,17 @@ button[type=button].icon {
   padding: 0 var(--gap-smaller) 0 0;
 }
 
-button[type=button] > img {
+button[type=button].no-text {
+  padding: 0;
   width: 30px;
-  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+button[type=button] > img {
+  width: 22px;
+  height: 22px;
 }
 
 button[type=button]:hover {
@@ -33,4 +41,13 @@ button[type=button]:hover {
 button[type=button]:disabled {
   background-color: var(--black-disabled);
   cursor: not-allowed;
+}
+
+button[type=button].active {
+  background-color: var(--black-hover);
+}
+
+button[type=button] > span {
+  text-overflow: ellipsis;
+  overflow: hidden;
 }

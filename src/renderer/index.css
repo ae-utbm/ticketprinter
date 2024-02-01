@@ -6,10 +6,10 @@
 :root {
   --gap: 20px;
   --gap-smaller: 10px;
-  --black: rgba(0, 0, 0, 0.8);
-  --black-hover: rgba(0, 0, 0, 0.6);
-  --black-disabled: rgba(0, 0, 0, 0.2);
-  --black-transparent: rgba(0, 0, 0, 0.5);
+  --black: rgb(30, 41, 59);
+  --black-hover: rgba(57, 91, 145, 0.6);
+  --black-disabled: rgba(30, 41, 59, 0.2);
+  --black-transparent: rgba(30, 41, 59, 0.5);
   --border-radius: 10px;
 }
 
@@ -23,12 +23,7 @@ body {
   position: relative;
   color: white;
   height: 100vh;
-  background: linear-gradient(
-    200.96deg,
-    #464646 -29.09%,
-    #4d1127 51.77%,
-    #211427 129.35%
-  );
+  background: #111;
   overflow-y: hidden;
   display: flex;
   justify-content: center;
@@ -39,7 +34,7 @@ h1, h2, h3, h4, h5, h6 {
   text-transform: uppercase;
   font-family: "Roboto", sans-serif;
   font-weight: 500;
-  font-style: normal;
+  font-style: thin;
 }
 
 #root {
@@ -47,5 +42,5 @@ h1, h2, h3, h4, h5, h6 {
   height: 100%;
   display: flex;
   justify-content: center;
-  align-items: center
+  padding: var(--gap);
 }
