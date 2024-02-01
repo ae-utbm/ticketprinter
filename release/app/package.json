@@ -2,7 +2,7 @@
   "name": "@ae_utbm/ticket_printer",
   "displayName": "Ticket Printer v2",
   "version": "2.0.0",
-  "description": "Software for printing tickets for the AE UTBM events",
+  "description": "Software for printing tickets for AE UTBM events",
   "license": "MIT",
   "author": {
     "name": "AE UTBM",
