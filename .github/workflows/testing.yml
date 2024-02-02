@@ -1,11 +1,11 @@
-name: Run
+name: Run tests
 
 on:
   workflow_call:
   workflow_dispatch:
 
 jobs:
-  test:
+  tests:
     strategy:
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
@@ -20,16 +20,17 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: npm
 
-      - name: npm install
-        run: |
-          npm install
+      - name: Install pnpm
+        run: npm install -g pnpm
 
-      - name: npm test
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Do tests
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          npm run package
-          npm exec tsc
-          npm test
+          pnpm run package
+          pnpm exec tsc
+          pnpm test
