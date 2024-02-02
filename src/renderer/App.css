@@ -1,0 +1,56 @@
+.base {
+  width: 100%;
+  max-width: 1526px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: var(--gap);
+}
+
+.base > .preview {
+  width: 450px;
+  height: 90vh;
+  background-color: var(--black-transparent);
+  border-radius: var(--border-radius);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.base > .options {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+.base > .options > .elements {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--gap);
+}
+
+.base > .options > .elements > .element {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-smaller);
+
+  width: calc(50% - var(--gap-smaller));
+  padding: 8px 10px 10px 10px;
+
+  background-color: var(--black-transparent);
+  border-radius: var(--border-radius);
+}
+
+/* Fix react-photo-editor CSS */
+input[type="number"].w-14.pl-1.rounded-md.text-right {
+  color: black;
+}
+
+/* Fix react-photo-editor CSS */
+canvas.max-w-lg.max-h-\[22rem\].w-full.object-fit.mx-auto {
+  width: auto;
+}

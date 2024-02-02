@@ -1,0 +1,53 @@
+button[type=button] {
+  background-color: var(--black);
+  color: white;
+  text-transform: uppercase;
+  border: none;
+
+  font-size: small;
+  height: 30px;
+  border-radius: var(--border-radius);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-smaller);
+
+  cursor: pointer;
+}
+
+button[type=button].icon {
+  justify-content: flex-start;
+  padding: 0 var(--gap-smaller) 0 0;
+}
+
+button[type=button].no-text {
+  padding: 0;
+  width: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+button[type=button] > img {
+  width: 22px;
+  height: 22px;
+}
+
+button[type=button]:hover {
+  background-color: var(--black-hover);
+}
+
+button[type=button]:disabled {
+  background-color: var(--black-disabled);
+  cursor: not-allowed;
+}
+
+button[type=button].active {
+  background-color: var(--black-hover);
+}
+
+button[type=button] > span {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

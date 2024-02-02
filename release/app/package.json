@@ -1,0 +1,19 @@
+{
+  "name": "@ae_utbm/ticket_printer",
+  "displayName": "Ticket Printer v2",
+  "version": "2.0.0",
+  "description": "Software for printing tickets for AE UTBM events",
+  "license": "MIT",
+  "author": {
+    "name": "AE UTBM",
+    "email": "ae.info@utbm.fr",
+    "url": "https://ae.utbm.fr/"
+  },
+  "main": "./dist/main/main.js",
+  "scripts": {
+    "rebuild": "node -r ts-node/register ../../.erb/scripts/electron-rebuild.js",
+    "postinstall": "npm run rebuild && npm run link-modules",
+    "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.ts"
+  },
+  "dependencies": {}
+}

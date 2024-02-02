@@ -1,0 +1,46 @@
+:root {
+  --input-button-width: 30px;
+}
+
+.ticket-options {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--gap-smaller);
+  justify-content: flex-start;
+}
+
+.photo-editor-main {
+  max-height: 100%;
+}
+
+input[type="file"] {
+  cursor: pointer;
+}
+
+.ticket-preview {
+  position: relative;
+  height: 200px;
+  width: 100%;
+  background-color: var(--black);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--border-radius);
+}
+
+.ticket-preview > img {
+  object-fit: contain;
+  height: 100%;
+}
+
+.ticket-preview > .btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: var(--black-transparent);
+}
+
+.ticket-preview > .btn:hover {
+  background-color: var(--black-hover);
+}
