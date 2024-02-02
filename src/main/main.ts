@@ -1,4 +1,13 @@
-/* eslint global-require: off, no-console: off, promise/always-return: off */
+/* eslint global-require: off,
+	no-console: off,
+	promise/always-return: off,
+	@typescript-eslint/no-unsafe-return: off,
+	@typescript-eslint/no-unsafe-call: off,
+	@typescript-eslint/no-unsafe-member-access: off,
+	@typescript-eslint/no-var-requires: off,
+	@typescript-eslint/no-unsafe-assignment: off,
+	@typescript-eslint/no-floating-promises: off,
+*/
 
 /**
  * This module executes inside of electron's main process. You can start
@@ -9,9 +18,11 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
+
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
-import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import { autoUpdater } from 'electron-updater';
+
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
@@ -19,13 +30,13 @@ class AppUpdater {
 	constructor() {
 		log.transports.file.level = 'info';
 		autoUpdater.logger = log;
-		autoUpdater.checkForUpdatesAndNotify();
+		autoUpdater.checkForUpdatesAndNotify().catch(console.error);
 	}
 }
 
 let mainWindow: BrowserWindow | null = null;
 
-ipcMain.on('ipc-example', async (event, arg) => {
+ipcMain.on('ipc-example', (event, arg: string) => {
 	const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
 	console.log(msgTemplate(arg));
 	event.reply('ipc-example', msgTemplate('pong'));
@@ -43,6 +54,7 @@ if (isDebug) {
 	require('electron-debug')();
 }
 
+// eslint-disable-next-line @typescript-eslint/require-await
 const installExtensions = async () => {
 	const installer = require('electron-devtools-installer');
 	const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
@@ -71,8 +83,8 @@ const createWindow = async () => {
 
 	mainWindow = new BrowserWindow({
 		show: false,
-		width: 1024,
-		height: 728,
+		width: 1080,
+		height: 720,
 		icon: getAssetPath('icon.png'),
 		webPreferences: {
 			preload: app.isPackaged

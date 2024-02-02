@@ -1,8 +1,8 @@
 import { useState, ChangeEvent } from 'react';
 import { ReactPhotoEditor } from 'react-photo-editor';
 
-import iconEdit from '../../assets/edit.svg';
 import Button from './Button';
+import iconEdit from '../../assets/edit.svg';
 
 import './index.css';
 import './TicketOptions.css';
@@ -34,10 +34,12 @@ export default function TicketOptions() {
 		}
 	};
 
-	const handleSaveImage = (editedFile: any) => {
+	const handleSaveImage = (
+		editedFile: React.SetStateAction<File | undefined>,
+	) => {
 		setFile(editedFile);
 		setShowModal(false);
-		setTicketUrl(URL.createObjectURL(editedFile));
+		setTicketUrl(URL.createObjectURL(editedFile as Blob));
 	};
 
 	return (
