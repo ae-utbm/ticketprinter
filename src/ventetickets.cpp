@@ -1,5 +1,4 @@
 #include "ventetickets.h"
-#include "ventetickets.h"
 #include <QPrinterInfo>
 #include <QPrinter>
 #include <QMessageBox>
@@ -8,7 +7,6 @@
 #include <QInputDialog>
 #include <QFileDialog>
 #include <locale>
-#include <sstream>
 
 /**
  * Constructor
@@ -24,18 +22,23 @@ VenteTickets::VenteTickets(QWidget * parent, Qt::WindowFlags f)
 
   /* printer */
   //if we can't find the default printer, we choose one
-  if(!SetPrinterInfo("TSP100"))
+  if(!SetPrinterInfo("TSP100")) {
     SelectPrinter(true);
+  }
 
   //default background image
   ticketImg=QImage("ticketAE.png");
 
   // if we can't load the default ticket background, we choose one
-  if (ticketImg.isNull())
-    Load_image(true);
-  else
-    ticketImg=ticketImg.scaledToWidth(Printer.pageRect().width()/2,
-                                      Qt::SmoothTransformation);
+  if (ticketImg.isNull()) {
+    Load_image();
+  }
+  else {
+    ticketImg = ticketImg.scaledToWidth(
+      Printer.pageRect().width() / 2,
+      Qt::SmoothTransformation
+    );
+  }
 
   logFileName = getenv("HOME");
   logFileName += "/aeticketptr_log.txt";
@@ -53,8 +56,7 @@ VenteTickets::VenteTickets(QWidget * parent, Qt::WindowFlags f)
 /**
  * Signal connections
  */
-void VenteTickets::SigConnect()
-{
+void VenteTickets::SigConnect() const {
   connect(actionTickets,SIGNAL(activated()),this,SLOT(Load_image()));
   connect(actionEventName,SIGNAL(activated()),this,SLOT(SetEventName()));
   connect(actionA_propos,SIGNAL(activated()),this,SLOT(About()));
@@ -71,7 +73,7 @@ void VenteTickets::SigConnect()
 void VenteTickets::SetEventName()
 {
   EventName = QInputDialog::getText(this,
-                                    QString::fromUtf8("Nom de l'évennement"),
+                                    QString::fromUtf8("Nom de l'événement"),
                                     QString::fromUtf8("Nom :"),
                                     QLineEdit::Normal,
                                     EventName);
@@ -79,14 +81,13 @@ void VenteTickets::SetEventName()
 
 /**
  * Load ticket's image
- * @param force force image selection
  */
-void VenteTickets::Load_image(bool force)
+void VenteTickets::Load_image()
 {
   QString fileName;
-  while(fileName.isEmpty() && force)
+  while(fileName.isEmpty())
   {
-    fileName = QFileDialog::getOpenFileName(0,
+    fileName = QFileDialog::getOpenFileName(nullptr,
                                             "Open File",
                                             QDir::currentPath(),
                                             "All images (*.png *.jpg)");
@@ -95,7 +96,7 @@ void VenteTickets::Load_image(bool force)
       QImage image(fileName);
       if (image.isNull())
       {
-        QMessageBox::information(0,
+        QMessageBox::information(nullptr,
                                  "Erreur",
                                  "Impossible de charger le fichier");
       }
@@ -106,12 +107,6 @@ void VenteTickets::Load_image(bool force)
       }
     }
   }
-  return;
-}
-
-void VenteTickets::Load_image()
-{
-  Load_image(true);
 }
 
 /**
@@ -120,25 +115,31 @@ void VenteTickets::Load_image()
  */
 void VenteTickets::SelectPrinter(bool force)
 {
-  QList<QPrinterInfo> printers = QPrinterInfo::availablePrinters();
-  QStringList sprinters;
-  for (int c = 0; c < printers.size(); ++c)
-    sprinters << printers[c].printerName();
-  printers.clear();
-  bool set = SetPrinterInfo(QInputDialog::getItem(this,
-                            QString::fromUtf8("Imprimante"),
-                            QString::fromUtf8("Imprimante :"),
-                            sprinters,
-                            0,
-                            false));
-  while(!set && force)
-  {
-    set = SetPrinterInfo(QInputDialog::getItem(this,
-                         QString::fromUtf8("Imprimante"),
-                         QString::fromUtf8("Imprimante :"),
-                         sprinters,
-                         0,
-                         false));
+  QStringList printers;
+  for (const auto& printer : QPrinterInfo::availablePrinters()) {
+    printers << printer.printerName();
+  }
+  bool set = SetPrinterInfo(
+    QInputDialog::getItem(
+      this,
+      QString::fromUtf8("Imprimante"),
+      QString::fromUtf8("Imprimante :"),
+      printers,
+      0,
+      false
+    )
+  );
+  while(!set && force) {
+    set = SetPrinterInfo(
+      QInputDialog::getItem(
+        this,
+        QString::fromUtf8("Imprimante"),
+        QString::fromUtf8("Imprimante :"),
+        printers,
+        0,
+        false
+      )
+    );
   }
 }
 void VenteTickets::SelectPrinter()
@@ -160,7 +161,7 @@ void VenteTickets::About()
   about += QString::fromUtf8("<h4>Basé sur </h4>");
   about += "Qt ";
   about += QT_VERSION_STR;
-  static QMessageBox* mbox = new QMessageBox (QMessageBox::Information,
+  static auto* mbox = new QMessageBox (QMessageBox::Information,
                                               QString::fromUtf8("À propos"),
                                               about);
   mbox->setButtonText ( 1, "OK" );
@@ -171,30 +172,15 @@ void VenteTickets::About()
  * Set printer name
  * @param name name of the printer
  */
-bool VenteTickets::SetPrinterInfo(QString name)
+bool VenteTickets::SetPrinterInfo(const QString& name)
 {
-  QList<QPrinterInfo> printers = QPrinterInfo::availablePrinters();
-  for (int c = 0; c < printers.size(); ++c)
-  {
-    if (printers[c].printerName()==name
-        || printers[c].printerName().indexOf(name,1)!=-1)
-    {
-      Printer.setPrinterName(printers[c].printerName());
-      Printer.setColorMode(QPrinter::GrayScale);
-      Printer.setPageMargins(0,0,0,0,QPrinter::Millimeter);
-#ifdef Q_WS_WIN
-      Printer.setPaperSize(QSizeF(70,2000),QPrinter::Millimeter);
-#else
-      Printer.setPaperSize(QPrinter::A4);
-      Printer.setPaperSize(QSize(Printer.paperSize(QPrinter::Millimeter).width()
-                                 ,2000)
-                           ,QPrinter::Millimeter);
-#endif
-      printers.clear();
+  for (const auto& printer : QPrinterInfo::availablePrinters()) {
+    if (printer.printerName().contains(name)) {
+      Printer.setPrinterName(printer.printerName());
+      Printer.setPageMargins(QMarginsF(), QPageLayout::Millimeter);
       return true;
     }
   }
-  printers.clear();
   return false;
 }
 
@@ -222,7 +208,7 @@ void VenteTickets::Print2()
  * Print tickets
  * @param nb number of tickets to print
  */
-void VenteTickets::Print(int nb)
+void VenteTickets::Print(const int nb)
 {
   QPainter Painter(&Printer);
   int header=0;
@@ -232,11 +218,9 @@ void VenteTickets::Print(int nb)
 #else
   Painter.setFont(QFont("Arial", 50, 1));
 #endif
-  Painter.setViewport(Printer.pageRect ());
-  if(EventName!="")
-  {
+  if (EventName != "") {
 #ifdef Q_WS_WIN
-    header=30;
+    header = 30;
     Painter.drawText(QRect(0,
                            0,
                            Printer.pageRect().width(),
@@ -244,16 +228,20 @@ void VenteTickets::Print(int nb)
                      Qt::AlignCenter,
                      EventName);
 #else
-    header=100;
-    Painter.drawText(QRect(0,
-                           0,
-                           Printer.pageRect().width(),
-                           50),
-                     Qt::AlignCenter,
-                     EventName);
+    header = 100;
+    Painter.drawText(
+      QRect(
+        0,
+        0,
+        Printer.pageRect().width(),
+        50
+      ),
+      Qt::AlignCenter,
+      EventName
+    );
 #endif
   }
-  for(int i=0;i<(nb/2);i++)
+  for(int i=0;i<nb/2;i++)
   {
     Painter.drawImage(QPoint(0,i*ticketImg.height()+header),
                       ticketImg);
@@ -284,15 +272,13 @@ void VenteTickets::Print(int nb)
 
 /**
  * Set number of tickets per group
- * @param nb number of tickets per group
+ * @param unite number of tickets per group
  */
 void VenteTickets::setUniteCarnet(int unite)
 {
-  QString str;
-
   uniteCarnet = unite;
 
-  str = QString("Carnet de ").append(QString::number(uniteCarnet)).append(" tickets :");
+  QString str = QString("Carnet de ").append(QString::number(uniteCarnet)).append(" tickets :");
   tik1label->setText(str);
   str = QString("Carnet de ").append(QString::number(2 * uniteCarnet)).append(" tickets :");
   tik2label->setText(str);
@@ -308,10 +294,12 @@ void VenteTickets::setUniteCarnet(int unite)
   */
 void VenteTickets::SelectNbTickets()
 {
-  int nb = QInputDialog::getInt(this,
-                                QString::fromUtf8("Nombre de tickets par carnet"),
-                                QString::fromUtf8("Nombre de tickets (carnet simple) :"),
-                                uniteCarnet, 1, 100);
+  const int nb = QInputDialog::getInt(
+    this,
+    QString::fromUtf8("Nombre de tickets par carnet"),
+    QString::fromUtf8("Nombre de tickets (carnet simple) :"),
+    uniteCarnet, 1, 100
+  );
   setUniteCarnet(nb);
 }
 
@@ -330,11 +318,10 @@ void VenteTickets::ResetCompteurs()
  * Open log file
  * @param fileName lof file name
  */
-void LogFile::loadLogFile(string fileName)
+void LogFile::loadLogFile(const string& fileName)
 {
   char buf[50];
   tm timeinfo;
-  time_t ttime;
   int t1, t2;
 
   ticket1Count = 0;
@@ -373,10 +360,10 @@ void LogFile::loadLogFile(string fileName)
     timeinfo.tm_mon--;
     timeinfo.tm_isdst = 0;
 
-    ttime = mktime(&timeinfo);
+    time_t ttime = mktime(&timeinfo);
 
     // Si le log date d'il y a moins de deux heures, on charge les nombres de ventes
-    if ((time(NULL) - ttime)  < 7200)
+    if ((time(nullptr) - ttime)  < 7200)
     {
       ticket1Count = t1;
       ticket2Count = t2;
@@ -397,7 +384,7 @@ void LogFile::loadLogFile(string fileName)
 /**
  * Get how many time 1st type tickets group has been printed
  */
-int LogFile::getCount1()
+int LogFile::getCount1() const
 {
   return ticket1Count;
 }
@@ -405,7 +392,7 @@ int LogFile::getCount1()
 /**
  * Get how many time 2nd type tickets group has been printed
  */
-int LogFile::getCount2()
+int LogFile::getCount2() const
 {
   return ticket2Count;
 }
@@ -414,7 +401,7 @@ int LogFile::getCount2()
 /**
  * Save how many time each types of tickets group has been printed
  */
-void LogFile::log(int t1, int t2)
+void LogFile::log(const int t1, const int t2)
 {
     char buf[50];
     time_t t;
@@ -424,7 +411,7 @@ void LogFile::log(int t1, int t2)
 
     logFile.seekg(logPos, ios_base::beg);
 
-    t = time(NULL);
+    t = time(nullptr);
     strftime(buf, 50, "%Y-%m-%d %H:%M:%S", localtime(&t));
     logFile << buf;
 
