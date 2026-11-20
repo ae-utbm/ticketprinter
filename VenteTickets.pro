@@ -1,5 +1,5 @@
 TEMPLATE = app
-QT = gui core
+QT = gui core widgets printsupport
 win32 {
   DEFINES += QT_DLL
   CONFIG += release dll app_bundle qt windows

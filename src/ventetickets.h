@@ -31,7 +31,7 @@ class VenteTickets : public QMainWindow, public Ui::MainWindow
 {
 Q_OBJECT
 public:
-  VenteTickets( QWidget * parent = 0, Qt::WFlags f = 0);
+  VenteTickets( QWidget * parent = 0, Qt::WindowFlags f = 0);
   void setUniteCarnet(int unite);
 private:
   QString EventName;

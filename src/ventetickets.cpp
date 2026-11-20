@@ -1,4 +1,5 @@
 #include "ventetickets.h"
+#include "ventetickets.h"
 #include <QPrinterInfo>
 #include <QPrinter>
 #include <QMessageBox>
@@ -13,7 +14,7 @@
  * Constructor
  * set some defaults setings
  */
-VenteTickets::VenteTickets( QWidget * parent, Qt::WFlags f)
+VenteTickets::VenteTickets(QWidget * parent, Qt::WindowFlags f)
 	: QMainWindow(parent, f)
 {
   setWindowTitle("Vente de tickets");
